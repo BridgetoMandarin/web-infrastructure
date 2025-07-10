@@ -12,13 +12,11 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-if ("measurementId" in firebaseConfig) {
+if ("measurementId" in firebaseConfig && type of firebase.analytics === 'function') {
   firebase.analytics();
 }
 
-// Initialize FirebaseUI Auth
-const ui = new firebaseui.auth.AuthUI(firebase.auth());
-
+//Firebase UI config
 const uiConfig = {
   signInSuccessUrl: "https://bridge-to-mandarin-6f6c1c.webflow.io/",
   signInOptions: [
@@ -28,6 +26,9 @@ const uiConfig = {
   //show as popup instead of redirect
   credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
 };
+
+// Initialize FirebaseUI Auth
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 // Wait for DOM to be ready
 window.addEventListener("load", () => {
