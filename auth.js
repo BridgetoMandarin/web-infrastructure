@@ -1,13 +1,4 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
-// Firebase SDKs are added in Webflow's custom code header
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-
-// Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyB21zrpHKPYKcOPK-YhAm_afH9Cp37zUxY",
   authDomain: "b2m-firebase.firebaseapp.com",
@@ -19,16 +10,27 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+firebase.initializeApp(firebaseConfig);
 
-// FirebaseUI 
-const ui = new firebaseui.auth.AuthUI(auth);
+if ("measurementId" in firebaseConfig) {
+  firebase.analytics();
+}
+
+// Initialize FirebaseUI Auth
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
 const uiConfig = {
-  signInSuccessUrl: "https://bridge-to-mandarin-6f6c1c.webflow.io/", //testing to go to HOME page for now
+  signInSuccessUrl: "https://bridge-to-mandarin-6f6c1c.webflow.io/",
   signInOptions: [
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID
   ],
+  //show as popup instead of redirect
+  credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
 };
-ui.start("#firebaseui-auth-container", uiConfig);
+
+// Wait for DOM to be ready
+window.addEventListener("load", () => {
+  ui.start("#firebaseui-auth-container", uiConfig);
+});
+
