@@ -1,4 +1,4 @@
-// Firebase config
+// Firebase config 
 const firebaseConfig = {
   apiKey: "AIzaSyB21zrpHKPYKcOPK-YhAm_afH9Cp37zUxY",
   authDomain: "b2m-firebase.firebaseapp.com",
@@ -10,28 +10,31 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-if ("measurementId" in firebaseConfig) {
-  firebase.analytics();
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
 }
 
-//Firebase UI config
+// Initialize FirebaseUI
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+// UI config
 const uiConfig = {
-  signInSuccessUrl: "https://bridge-to-mandarin-6f6c1c.webflow.io/",
+  signInSuccessUrl: "/", // redirect after login
   signInOptions: [
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID
   ],
-  //show as popup instead of redirect
-  credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+  signInFlow: "popup"
 };
 
-// Initialize FirebaseUI Auth
-const ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-// Wait for DOM to be ready
+// Wait for page to load before starting UI
 window.addEventListener("load", () => {
-  ui.start("#firebaseui-auth-container", uiConfig);
+  const container = document.getElementById("firebaseui-auth-container");
+  if (container) {
+    ui.start("#firebaseui-auth-container", uiConfig);
+  } else {
+    console.error("FirebaseUI container not found.");
+  }
 });
+
 
