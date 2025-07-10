@@ -12,7 +12,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-if ("measurementId" in firebaseConfig && type of firebase.analytics === 'function') {
+if ("measurementId" in firebaseConfig) {
   firebase.analytics();
 }
 
