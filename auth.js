@@ -6,10 +6,10 @@ import { getAnalytics } from "firebase/analytics";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 
-// Your web app's Firebase configuration
+// Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "NONE",
+  apiKey: "AIzaSyB21zrpHKPYKcOPK-YhAm_afH9Cp37zUxY",
   authDomain: "b2m-firebase.firebaseapp.com",
   projectId: "b2m-firebase",
   storageBucket: "b2m-firebase.firebasestorage.app",
