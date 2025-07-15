@@ -4,18 +4,6 @@
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    serverTimestamp,
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -32,73 +20,4 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  window.addEventListener("load", () => {
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const signupBtn = document.getElementById("signup-btn");
-    const loginBtn = document.getElementById("login-btn");
-    const errorDiv = document.getElementById("auth-error");
-
-    const isStudentPage = window.location.href.includes("student");
-
-    //sign up
-    signupBtn?.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const email = emailInput.value;
-      const password = passwordInput.value;
-
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = cred.user.uid;
-
-        //saving role
-        await setDoc(doc(db, "users", uid), {
-          role: isStudentPage ? "student" : "volunteer",
-          createdAt: serverTimestamp(),
-        });
-
-        // If student, create student specific doc
-        if (isStudentPage) {
-          await setDoc(doc(db, "students", uid), {
-            currentLesson: "Lesson 1"
-          });
-        }
-
-        const redirectUrl = isStudentPage ? "/dashboard-student" : "/dashboard-volunteer";
-        window.location.href = redirectUrl;
-
-      } catch (err) {
-        console.error("Sign Up Error:", err);
-        errorDiv.textContent = err.message;
-      }
-    });
-
-    //login
-    loginBtn?.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const email = emailInput.value;
-      const password = passwordInput.value;
-
-      try {
-        const cred = await signInWithEmailAndPassword(auth, email, password);
-        const uid = cred.user.uid;
-
-        const userDocSnap = await getDoc(doc(db, "users", uid));
-        const role = userDocSnap.exists() ? userDocSnap.data().role : null;
-
-        if (!role) throw new Error("User role not found.");
-
-        const redirectUrl = role === "student" ? "/dashboard-student" : "/dashboard-volunteer";
-        window.location.href = redirectUrl;
-
-      } catch (err) {
-        console.error("Login Error:", err);
-        errorDiv.textContent = err.message;
-      }
-    });
-  });
 </script>
-
