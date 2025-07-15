@@ -1,9 +1,7 @@
 <script type="module">
-  // Import the functions you need from the SDKs you need
+  // Firebase CDN imports
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
   import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -17,8 +15,7 @@
     serverTimestamp,
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  // Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyB21zrpHKPYKcOPK-YhAm_afH9Cp37zUxY",
     authDomain: "b2m-firebase.firebaseapp.com",
@@ -35,6 +32,7 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  // Wait for Webflow to load DOM
   window.addEventListener("load", () => {
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
@@ -44,7 +42,7 @@
 
     const isStudentPage = window.location.href.includes("student");
 
-    //sign up
+    //Sign up
     signupBtn?.addEventListener("click", async (e) => {
       e.preventDefault();
       const email = emailInput.value;
@@ -54,25 +52,41 @@
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         const uid = cred.user.uid;
 
-        //saving role
+        // Save role to 'users' collection
         await setDoc(doc(db, "users", uid), {
           role: isStudentPage ? "student" : "volunteer",
+          email: email,
           createdAt: serverTimestamp(),
         });
 
-        // If student, create student specific doc
+        //if student, also create a "students" document
         if (isStudentPage) {
           await setDoc(doc(db, "students", uid), {
-            currentLesson: "Lesson 1"
+            email: email,
+            createdAt: serverTimestamp()
           });
         }
 
+        //otherwise, create "volunteers" document
+        else{
+           await setDoc(doc(db, "volunteers", uid), {
+            email: email,
+            createdAt: serverTimestamp()
+          });
+        }
+
+        //Showing success popup
+        window.alert("You've successfully signed up!");
+
+        //redirect based on role
         const redirectUrl = isStudentPage ? "/dashboard-student" : "/dashboard-volunteer";
         window.location.href = redirectUrl;
 
       } catch (err) {
         console.error("Sign Up Error:", err);
+        window.alert(`Sign Up Error: ${err.message}`);
         errorDiv.textContent = err.message;
+        errorDiv.style.display = "block";
       }
     });
 
@@ -86,19 +100,31 @@
         const cred = await signInWithEmailAndPassword(auth, email, password);
         const uid = cred.user.uid;
 
+        //fetch role from Firestore
         const userDocSnap = await getDoc(doc(db, "users", uid));
         const role = userDocSnap.exists() ? userDocSnap.data().role : null;
 
-        if (!role) throw new Error("User role not found.");
+        if (!role) {
+          throw new Error("No role assigned to this account. Please contact support.");
+        }
 
         const redirectUrl = role === "student" ? "/dashboard-student" : "/dashboard-volunteer";
         window.location.href = redirectUrl;
 
       } catch (err) {
         console.error("Login Error:", err);
+        window.alert(`Login Error: ${err.message}`);
         errorDiv.textContent = err.message;
+        errorDiv.style.display = "block";
+
+        setTimeout(() => {
+          errorDiv.textContent = "";
+          errorDiv.style.display = "none";
+        }, 4000);
       }
     });
+  });
+</script>
   });
 </script>
 
