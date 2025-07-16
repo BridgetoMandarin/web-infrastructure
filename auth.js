@@ -1,5 +1,6 @@
-
-  // Wait for Webflow to load DOM
+const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
+  
+// Wait for Webflow to load DOM
   window.addEventListener("load", () => {
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
@@ -23,14 +24,14 @@
         await db.setDoc(doc(db, "users", uid), {
           role: isStudentPage ? "student" : "volunteer",
           email: email,
-          createdAt: db.serverTimestamp(),
+          createdAt: serverTimestamp(),
         });
 
         //if student, also create a "students" document
         if (isStudentPage) {
           await db.setDoc(doc(db, "students", uid), {
             email: email,
-            createdAt: db.serverTimestamp()
+            createdAt: serverTimestamp()
           });
         }
 
@@ -38,7 +39,7 @@
         else{
            await db.setDoc(doc(db, "volunteers", uid), {
             email: email,
-            createdAt: db.serverTimestamp()
+            createdAt: serverTimestamp()
           });
         }
 
