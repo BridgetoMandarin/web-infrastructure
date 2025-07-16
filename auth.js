@@ -23,14 +23,14 @@
         await db.setDoc(doc(db, "users", uid), {
           role: isStudentPage ? "student" : "volunteer",
           email: email,
-          createdAt: serverTimestamp(),
+          createdAt: db.serverTimestamp(),
         });
 
         //if student, also create a "students" document
         if (isStudentPage) {
           await db.setDoc(doc(db, "students", uid), {
             email: email,
-            createdAt: serverTimestamp()
+            createdAt: db.serverTimestamp()
           });
         }
 
@@ -38,7 +38,7 @@
         else{
            await db.setDoc(doc(db, "volunteers", uid), {
             email: email,
-            createdAt: serverTimestamp()
+            createdAt: db.serverTimestamp()
           });
         }
 
@@ -84,7 +84,7 @@
         errorDiv.textContent = err.message;
         errorDiv.style.display = "block";
 
-        setTimeout(() => {
+        db.setTimeout(() => {
           errorDiv.textContent = "";
           errorDiv.style.display = "none";
         }, 4000);
