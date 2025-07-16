@@ -1,36 +1,3 @@
-<script type="module">
-  // Firebase CDN imports
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    serverTimestamp,
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-  // Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyB21zrpHKPYKcOPK-YhAm_afH9Cp37zUxY",
-    authDomain: "b2m-firebase.firebaseapp.com",
-    projectId: "b2m-firebase",
-    storageBucket: "b2m-firebase.firebasestorage.app",
-    messagingSenderId: "287571879958",
-    appId: "1:287571879958:web:dee6b7ce277e90906d6d37",
-    measurementId: "G-XK06N5MYH5"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
 
   // Wait for Webflow to load DOM
   window.addEventListener("load", () => {
@@ -124,5 +91,5 @@
       }
     });
   });
-</script>
+
 
