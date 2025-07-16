@@ -52,10 +52,13 @@
       e.preventDefault();
       const email = emailInput.value;
       const password = passwordInput.value;
+      console.log(email);
+      console.log(password);
 
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         const uid = cred.user.uid;
+        console.log(uid);
 
         // Save role to 'users' collection
         await setDoc(doc(db, "users", uid), {
