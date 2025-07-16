@@ -16,11 +16,11 @@
       const password = passwordInput.value;
 
       try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const cred = await auth.createUserWithEmailAndPassword(auth, email, password);
         const uid = cred.user.uid;
 
         // Save role to 'users' collection
-        await setDoc(doc(db, "users", uid), {
+        await db.setDoc(doc(db, "users", uid), {
           role: isStudentPage ? "student" : "volunteer",
           email: email,
           createdAt: serverTimestamp(),
@@ -28,7 +28,7 @@
 
         //if student, also create a "students" document
         if (isStudentPage) {
-          await setDoc(doc(db, "students", uid), {
+          await db.setDoc(doc(db, "students", uid), {
             email: email,
             createdAt: serverTimestamp()
           });
@@ -36,7 +36,7 @@
 
         //otherwise, create "volunteers" document
         else{
-           await setDoc(doc(db, "volunteers", uid), {
+           await db.setDoc(doc(db, "volunteers", uid), {
             email: email,
             createdAt: serverTimestamp()
           });
@@ -64,11 +64,11 @@
       const password = passwordInput.value;
 
       try {
-        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const cred = await auth.signInWithEmailAndPassword(auth, email, password);
         const uid = cred.user.uid;
 
         //fetch role from Firestore
-        const userDocSnap = await getDoc(doc(db, "users", uid));
+        const userDocSnap = await db.getDoc(doc(db, "users", uid));
         const role = userDocSnap.exists() ? userDocSnap.data().role : null;
 
         if (!role) {
