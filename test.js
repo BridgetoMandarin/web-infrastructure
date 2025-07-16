@@ -7,6 +7,14 @@
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    serverTimestamp,
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
 
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
