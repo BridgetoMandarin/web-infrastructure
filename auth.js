@@ -87,6 +87,7 @@ window.addEventListener("load", () => {
 
   //Signout
   signoutBtn?.addEventListener("click", async () => {
+    e.preventDefault();
     console.log("Signout button clicked");
     // try {
     // await auth.signOut();
