@@ -87,18 +87,20 @@ window.addEventListener("load", () => {
 
   //Signout
   signoutBtn?.addEventListener("click", async () => {
-    try {
-    await auth.signOut();
-    window.alert("You've been signed out!");
-    window.location.href = "/"; 
+    console.log("Signout button clicked");
+    // try {
+    // await auth.signOut();
+    // window.alert("You've been signed out!");
+    // window.location.href = "/"; 
 
-    } catch (err) {
-      console.error("Signout Error:", err);
-      errorDiv.textContent = err.message;
-      errorDiv.style.display = "block";
-      window.alert(`Signout Error: ${err.message}`);
-    }
-
+    // } catch (err) {
+    //   console.error("Signout Error:", err);
+    //   if (errorDiv){
+    //   errorDiv.textContent = err.message;
+    //   errorDiv.style.display = "block";
+    //   }
+    //   window.alert(`Signout Error: ${err.message}`);
+    // }
   });
 
 });
