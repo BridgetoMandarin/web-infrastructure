@@ -1,3 +1,5 @@
+// USE COMPAT SYNTAX
+
 // Firestore timestamp
 const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 
@@ -8,13 +10,14 @@ window.addEventListener("load", () => {
   const signupBtn = document.getElementById("signup-btn");
   const loginBtn = document.getElementById("login-btn");
   const errorDiv = document.getElementById("auth-error");
+  const signoutBtn = document.getElementById("signout-btn");
 
   const isStudentPage = window.location.href.includes("student");
 
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // Sign up
+  //Sign up
   signupBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
     const email = emailInput.value;
@@ -24,7 +27,7 @@ window.addEventListener("load", () => {
       const cred = await auth.createUserWithEmailAndPassword(email, password);
       const uid = cred.user.uid;
 
-      // Save role to 'users' collection
+      //Save role to "users" collection
       await db.collection("users").doc(uid).set({
         role: isStudentPage ? "student" : "volunteer",
         email: email,
@@ -51,7 +54,7 @@ window.addEventListener("load", () => {
     }
   });
 
-  // Login
+  //Login
   loginBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
     const email = emailInput.value;
@@ -81,4 +84,21 @@ window.addEventListener("load", () => {
       }, 4000);
     }
   });
+
+  //Signout
+  signoutBtn?.addEventListener("click", async () => {
+    try {
+    await auth.signOut();
+    window.alert("You've been signed out!");
+    window.location.href = "/"; 
+
+    } catch (err) {
+      console.error("Signout Error:", err);
+      errorDiv.textContent = err.message;
+      errorDiv.style.display = "block";
+      window.alert(`Signout Error: ${err.message}`);
+    }
+
+  });
+
 });
