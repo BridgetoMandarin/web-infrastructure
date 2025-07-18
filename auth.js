@@ -6,14 +6,16 @@ const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 // Wait for Webflow to load DOM
 window.addEventListener("load", () => {
 
-  console.log("Signout script loaded");
-
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
   const signupBtn = document.getElementById("signup-btn");
   const loginBtn = document.getElementById("login-btn");
   const errorDiv = document.getElementById("auth-error");
   const signoutBtn = document.getElementById("signout-btn");
+
+  console.log("Signout script loaded");
+  console.log("signoutBtn:", signoutBtn);
+
 
   const isStudentPage = window.location.href.includes("student");
 
