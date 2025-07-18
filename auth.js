@@ -11,11 +11,6 @@ window.addEventListener("load", () => {
   const signupBtn = document.getElementById("signup-btn");
   const loginBtn = document.getElementById("login-btn");
   const errorDiv = document.getElementById("auth-error");
-  const signoutBtn = document.getElementById("signout-btn");
-
-  console.log("Signout script loaded");
-  console.log("signoutBtn:", signoutBtn);
-
 
   const isStudentPage = window.location.href.includes("student");
 
@@ -89,35 +84,4 @@ window.addEventListener("load", () => {
       }, 4000);
     }
   });
-
-
-  console.log("Found signoutBtn:", signoutBtn);
-
-  if (!signoutBtn) {
-    console.error("Signout button not found!");
-    return;
-  }
-
-
-  //Signout
- if (signoutBtn) {
-  signoutBtn.addEventListener("click", async () => {
-    console.log("Signout button clicked");
-
-    try {
-      await auth.signOut();
-      window.alert("You've been signed out!");
-      window.location.href = "/";
-    } catch (err) {
-      console.error("Signout Error:", err);
-      const errorDiv = document.getElementById("auth-error");
-      if (errorDiv) {
-        errorDiv.textContent = err.message;
-        errorDiv.style.display = "block";
-      }
-    }
-  });
-} else {
-  console.log("Signout button not present on this page.");
-}
 });
