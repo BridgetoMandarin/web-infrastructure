@@ -5,6 +5,9 @@ const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 
 // Wait for Webflow to load DOM
 window.addEventListener("load", () => {
+
+  console.log("Signout script loaded");
+
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
   const signupBtn = document.getElementById("signup-btn");
@@ -85,17 +88,30 @@ window.addEventListener("load", () => {
     }
   });
 
+
+  console.log("Found signoutBtn:", signoutBtn);
+
+  if (!signoutBtn) {
+    console.error("Signout button not found!");
+    return;
+  }
+
+
   //Signout
   signoutBtn.addEventListener("click", async () => {
+    console.log("Signout button clicked");
+
     try {
-    await auth.signOut();
+    await firebase.auth().signOut();
+    console.log("User signed out.");
     window.alert("You've been signed out!");
     window.location.href = "/"; 
-
     } catch (err) {
       console.error("Signout Error:", err);
+      if(errorDiv){
       errorDiv.textContent = err.message;
       errorDiv.style.display = "block";
+      }
       window.alert(`Signout Error: ${err.message}`);
     }
   });
