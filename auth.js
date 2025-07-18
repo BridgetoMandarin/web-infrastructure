@@ -100,21 +100,24 @@ window.addEventListener("load", () => {
 
 
   //Signout
+ if (signoutBtn) {
   signoutBtn.addEventListener("click", async () => {
     console.log("Signout button clicked");
 
     try {
-    await firebase.auth().signOut();
-    console.log("User signed out.");
-    window.alert("You've been signed out!");
-    window.location.href = "/"; 
+      await auth.signOut();
+      window.alert("You've been signed out!");
+      window.location.href = "/";
     } catch (err) {
       console.error("Signout Error:", err);
-      if(errorDiv){
-      errorDiv.textContent = err.message;
-      errorDiv.style.display = "block";
+      const errorDiv = document.getElementById("auth-error");
+      if (errorDiv) {
+        errorDiv.textContent = err.message;
+        errorDiv.style.display = "block";
       }
-      window.alert(`Signout Error: ${err.message}`);
     }
   });
+} else {
+  console.log("Signout button not present on this page.");
+}
 });
