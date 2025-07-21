@@ -42,9 +42,4 @@ This repository connects **Firebase Auth** and **Firebase Analytics** to a **Web
 ## Current Status
 Actively being integrated and tested on Webflow.
 
----
-
-## 📌 Notes
-
-Feel free to fork or reuse for similar Webflow–Firebase integration projects! Suggestions or contributions are welcome.
 
