@@ -12,7 +12,7 @@ window.addEventListener("load", function () {
   signoutBtn.addEventListener("click", async () => {
     try {
       await firebase.auth().signOut();
-      alert("You've successfully signed out!");
+      this.window.alert("You've successfully signed out!");
       window.location.href = "/"; //redirecting to Home page
     } catch (err) {
       console.error("Error signing out:", err);

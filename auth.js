@@ -34,12 +34,21 @@ window.addEventListener("load", () => {
         createdAt: serverTimestamp(),
       });
 
-      // Create student or volunteer doc
-      const roleCollection = isStudentPage ? "students" : "volunteers";
-      await db.collection(roleCollection).doc(uid).set({
-        email: email,
-        createdAt: serverTimestamp(),
-      });
+ // Create student or volunteer doc
+const roleCollection = isStudentPage ? "students" : "volunteers";
+
+// Prepare the base data for both roles
+const roleData = {
+  email: email,
+  createdAt: serverTimestamp(),
+};
+
+// Add currentLevel ONLY for students
+if (isStudentPage) {
+  roleData.currentLevel = 1; // Starting all students at Level 1
+}
+
+await db.collection(roleCollection).doc(uid).set(roleData);
 
       // Showing success popup
       window.alert("You've successfully signed up!");
