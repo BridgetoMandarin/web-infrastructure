@@ -43,9 +43,11 @@ const roleData = {
   createdAt: serverTimestamp(),
 };
 
-// Add currentLevel ONLY for students
-if (isStudentPage) {
-  roleData.currentLevel = 1; // Starting all students at Level 1
+if (isStudentPage === true) {
+  roleData.currentLevel = 1;
+  console.log("Student detected — adding currentLevel to:", roleData);
+} else {
+  console.log("Volunteer detected — roleData:", roleData);
 }
 
 await db.collection(roleCollection).doc(uid).set(roleData);
