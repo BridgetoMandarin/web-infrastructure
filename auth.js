@@ -45,17 +45,21 @@ const roleData = {
 
 if (isStudentPage === true) {
   roleData.currentLevel = 1;
+  //Testing to see if code detects role
   console.log("Student detected — adding currentLevel to:", roleData);
 } else {
   console.log("Volunteer detected — roleData:", roleData);
 }
 
 await db.collection(roleCollection).doc(uid).set(roleData);
+      //Test console print
+console.log("Firestore doc successfully written");
 
       // Showing success popup
-      window.alert("You've successfully signed up!");
+      //TEST COMMENT
+      //window.alert("You've successfully signed up!");
       const redirectUrl = isStudentPage ? "/dashboard-student" : "/dashboard-volunteer";
-      window.location.href = redirectUrl;
+      //window.location.href = redirectUrl;
 
     } catch (err) {
       console.error("Sign Up Error:", err);
