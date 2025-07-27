@@ -32,6 +32,7 @@ window.addEventListener("load", () => {
       const cred = await auth.createUserWithEmailAndPassword(email, password);
       const uid = cred.user.uid;
 
+      console.log("Writing to users collection...");
       //Save role to "users" collection
       await db.collection("users").doc(uid).set({
         role: isStudentPage ? "student" : "volunteer",
@@ -40,6 +41,7 @@ window.addEventListener("load", () => {
         lastName: lastName,
         createdAt: serverTimestamp(),
       });
+      console.log("Successfully wrote user doc");
 
  // Create student or volunteer doc
 const roleCollection = isStudentPage ? "students" : "volunteers";
@@ -60,15 +62,17 @@ if (isStudentPage) {
   console.log("Volunteer detected — roleData:", roleData);
 }
 
+
+console.log(`Writing to ${roleCollection} collection...`);
 //Write to collection based on role
 await db.collection(roleCollection).doc(uid).set(roleData);
       //Test console print
 console.log("Firestore doc successfully written");
 
-      // Showing success popup
-      window.alert("You've successfully signed up!");
-      const redirectUrl = isStudentPage ? "/dashboard-student" : "/dashboard-volunteer";
-      window.location.href = redirectUrl;
+      // // Showing success popup
+      // window.alert("You've successfully signed up!");
+      // const redirectUrl = isStudentPage ? "/dashboard-student" : "/dashboard-volunteer";
+      // window.location.href = redirectUrl;
 
     } catch (err) {
       console.error("Sign Up Error:", err);
