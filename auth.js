@@ -12,8 +12,8 @@ window.addEventListener("load", () => {
   const signupBtn = document.getElementById("signup-btn");
   const loginBtn = document.getElementById("login-btn");
   const errorDiv = document.getElementById("auth-error");
-  const firstNameInput = document.getElementById("firstName");
-  const lastNameInput = document.getElementById("lastName");
+  const firstNameInput = document.getElementById("firstName").value;
+  const lastNameInput = document.getElementById("lastName").value;
 
   const isStudentPage = window.location.href.includes("student");
 
@@ -34,8 +34,8 @@ window.addEventListener("load", () => {
       await db.collection("users").doc(uid).set({
         role: isStudentPage ? "student" : "volunteer",
         email: email,
-        firstName: firstNameInput.value,
-        lastName: lastNameInput.value,
+        firstName: firstNameInput,
+        lastName: lastNameInput,
         createdAt: serverTimestamp(),
       });
 
