@@ -12,8 +12,8 @@ window.addEventListener("load", () => {
   const signupBtn = document.getElementById("signup-btn");
   const loginBtn = document.getElementById("login-btn");
   const errorDiv = document.getElementById("auth-error");
-  const firstNameInput = document.getElementById("firstName").value;
-  const lastNameInput = document.getElementById("lastName").value;
+  const firstNameInput = document.getElementById("firstName");
+  const lastNameInput = document.getElementById("lastName");
 
   const isStudentPage = window.location.href.includes("student");
 
@@ -25,6 +25,8 @@ window.addEventListener("load", () => {
     e.preventDefault();
     const email = emailInput.value;
     const password = passwordInput.value;
+    const firstName = firstNameInput.value;
+    const lastName = lastNameInput.value;
 
     try {
       const cred = await auth.createUserWithEmailAndPassword(email, password);
@@ -34,8 +36,8 @@ window.addEventListener("load", () => {
       await db.collection("users").doc(uid).set({
         role: isStudentPage ? "student" : "volunteer",
         email: email,
-        firstName: firstNameInput,
-        lastName: lastNameInput,
+        firstName: firstName,
+        lastName: lastName,
         createdAt: serverTimestamp(),
       });
 
