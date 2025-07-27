@@ -6,11 +6,14 @@ const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 // Wait for Webflow to load DOM
 window.addEventListener("load", () => {
 
+  //Connecting Webflow ID attribute (on login/signup pages) to code
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
   const signupBtn = document.getElementById("signup-btn");
   const loginBtn = document.getElementById("login-btn");
   const errorDiv = document.getElementById("auth-error");
+  const firstNameInput = document.getElementById("firstName");
+  const lastNameInput = document.getElementById("lastName");
 
   const isStudentPage = window.location.href.includes("student");
 
@@ -31,6 +34,8 @@ window.addEventListener("load", () => {
       await db.collection("users").doc(uid).set({
         role: isStudentPage ? "student" : "volunteer",
         email: email,
+        firstName: firstNameInput.value,
+        lastName: lastNameInput.value,
         createdAt: serverTimestamp(),
       });
 
@@ -56,10 +61,9 @@ await db.collection(roleCollection).doc(uid).set(roleData);
 console.log("Firestore doc successfully written");
 
       // Showing success popup
-      //TEST COMMENT
-      //window.alert("You've successfully signed up!");
+      window.alert("You've successfully signed up!");
       const redirectUrl = isStudentPage ? "/dashboard-student" : "/dashboard-volunteer";
-      //window.location.href = redirectUrl;
+      window.location.href = redirectUrl;
 
     } catch (err) {
       console.error("Sign Up Error:", err);
