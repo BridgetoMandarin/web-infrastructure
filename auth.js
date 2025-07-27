@@ -47,10 +47,12 @@ const roleCollection = isStudentPage ? "students" : "volunteers";
 // Prepare the base data for both roles
 const roleData = {
   email: email,
+  firstName: firstName,
+  lastName: lastName,
   createdAt: serverTimestamp(),
 };
 
-if (isStudentPage === true) {
+if (isStudentPage) {
   roleData.currentLevel = 1;
   //Testing to see if code detects role
   console.log("Student detected — adding currentLevel to:", roleData);
@@ -58,6 +60,7 @@ if (isStudentPage === true) {
   console.log("Volunteer detected — roleData:", roleData);
 }
 
+//Write to collection based on role
 await db.collection(roleCollection).doc(uid).set(roleData);
       //Test console print
 console.log("Firestore doc successfully written");
