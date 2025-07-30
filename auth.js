@@ -61,9 +61,9 @@ if (isStudentPage) {
 await db.collection(roleCollection).doc(uid).set(roleData);
 
 // Showing success popup
-window.alert("You've successfully signed up!");
-const redirectUrl = isStudentPage ? "/dashboard-student" : "/dashboard-volunteer";
-window.location.href = redirectUrl;
+  window.alert("You've successfully signed up!");
+  const redirectUrl = isStudentPage ? "/dashboard-student" : "/dashboard-volunteer";
+  window.location.href = redirectUrl;
 
     }catch (err) {
       console.error("Sign Up Error:", err);
