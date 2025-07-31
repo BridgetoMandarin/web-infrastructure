@@ -1,3 +1,28 @@
+//Logic for displaying Volunteer first name 
+auth.onAuthStateChanged(async function(user) {
+    if (!user) return;
+
+    try {
+      const userType = window.location.pathname.includes("volunteer") ? "volunteers" : "students";
+
+      const userRef = db.collection(userType).doc(user.uid);
+      const docSnap = await userRef.get();
+
+      if (docSnap.exists) {
+        const firstName = docSnap.data().firstName;
+        const welcomeEl = document.getElementById("welcome-text");
+
+        if (firstName && welcomeEl) {
+          welcomeEl.innerText = `${firstName}!`;
+        }
+      }
+
+    } catch (err) {
+      console.error("Error fetching name:", err);
+    }
+  });
+
+
 //logic for displaying live student list
   async function fetchStudents() {
     //Getting all documents in "students" collection

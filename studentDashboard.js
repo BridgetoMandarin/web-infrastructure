@@ -1,8 +1,7 @@
-//logic for retrieving & displaying current lesson level
-
+//logic for retrieving & displaying student first name & current lesson level
  auth.onAuthStateChanged(async function(user) {
     if (!user) return;
-
+ 
     //Creates a reference to the Firestore document at students/{userID}
     const docRef = db.collection("students").doc(user.uid);
     //Retrieves that document’s snapshot (data) asynchronously
@@ -10,8 +9,15 @@
 
     //Getting the current lesson level from the document
     if (docSnap.exists) {
+      const firstName = docSnap.data().firstName;
+      const welcomeEl = document.getElementById("welcome-text");
       const currentLevel = docSnap.data().currentLevel;
 
+      //displaying student's first name in header
+        if (firstName && welcomeEl) {
+          welcomeEl.innerText = `${firstName}!`;
+        }
+      
       for (let i = 1; i <= 4; i++) {
         //Grabs the HTML element with ID lesson-1, lesson-2 etc
         const levelElement = document.querySelector(`#lesson-${i}`);
@@ -23,6 +29,7 @@
         }
       }
     }
+  
 
 //Unlocking next level
    document.getElementById("complete-lesson").addEventListener("click", async function() {
@@ -49,3 +56,4 @@
       }
     });
 });
+
