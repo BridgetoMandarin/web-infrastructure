@@ -21,6 +21,13 @@ This repository connects **Firebase Auth** and **Firebase Analytics** to a **Web
 - `signout.js` 
   Handles the **sign-out button** logic on dashboard pages.
 
+- `studentDashboard.js`
+  Fetches and displays the Student's name in the heading.
+  Handles the **level-locking** logic on the Student Dashboard page.
+
+- `volunteerDashboard.js`
+  Fetches and displays the Volunteer's name in the heading.
+  Fetches and populates all current students on the Volunteer Dashboard page.
 ---
 
 ## Setup
