@@ -23,81 +23,87 @@ auth.onAuthStateChanged(async function(user) {
   });
 
 
-//logic for displaying live student list
-  async function fetchStudents() {
-    //Getting all documents in "students" collection
-    const snapshot = await firebase.firestore().collection("students").get();
-    return snapshot.docs.map(doc => doc.data());//convert Firestore docs to JS objects
-  }
+//logic for populating the live student list
+//Getting the table and row template
+const table = document.getElementById("student-table");
+const template = document.getElementById("student-row-template");
+template.style.display = "none"; //hide the template from view
 
-//Creates and adds HTML elements to show the student data
-function renderStudents(students) {
-  const studentList = document.getElementById("student-list");
-  studentList.innerHTML = "";//Clear previous list
-
-  students.forEach(student => {
-    const card = document.createElement("div");
-    card.className = "student-card";
-
-    card.innerHTML = `
-      <div class="student-first">${student.firstName}</div>
-      <div class="student-last">${student.lastName}</div>
-      <div class="student-email">${student.email}</div>
-      <div class="student-level">${student.currentLevel}</div>
-    `;
-
-    studentList.appendChild(card);
+//Function to fetch students from Firestore
+function fetchStudents() {
+  return db.collection("students").get().then((querySnapshot) => {
+    const students = [];
+    querySnapshot.forEach((doc) => {
+      const student = doc.data();
+      students.push(student); //store each student in an array
+    });
+    return students; //return the array students array
+  }).catch((error) => {
+    console.error("Error loading students:", error);
+    return []; //empty list if error
   });
 }
 
-//Sorting logic
-  function sortStudents(key, direction = "asc") {
-    const sorted = [...window.cachedStudents].sort((a, b) => {
-      //Numerical sort
-      if (key === "currentLevel") {
-        return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
-      } else {
-        //Alphabetical sort
-        const valA = a[key]?.toLowerCase() || "";
-        const valB = b[key]?.toLowerCase() || "";
-        return direction === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
-      }
-    });
+// Function to render students list
+function renderStudents(students) {
+  //Clear existing rows
+  table.querySelectorAll(".student-row").forEach(row => row.remove());
 
-    renderStudents(sorted);
-  }
+  students.forEach((student) => {
+    const clone = template.cloneNode(true); //duplicate the template
+    clone.style.display = "flex"; // or "block" based on layout
+    clone.classList.add("student-row"); //adding class for cleanup
+    clone.removeAttribute("id"); //removing duplicate ID
 
-  let currentSort = { key: "", direction: "asc" };
+    //Filling in student data
+    clone.querySelector("#firstname").textContent = student.firstName || "—";
+    clone.querySelector("#lastname").textContent = student.lastName || "—";
+    clone.querySelector("#email").textContent = student.email || "—";
+    clone.querySelector("#level").textContent = student.currentLevel || "—";
 
-  //Hook up to Webflow elements
-  document.getElementById("sort-firstname").addEventListener("click", () => {
-    toggleSort("firstName");
+    table.appendChild(clone); //Add to table
   });
-  document.getElementById("sort-lastname").addEventListener("click", () => {
-    toggleSort("lastName");
-  });
-  document.getElementById("sort-email").addEventListener("click", () => {
-    toggleSort("email");
-  });
-  document.getElementById("sort-level").addEventListener("click", () => {
-    toggleSort("currentLevel");
-  });
+}
 
-  function toggleSort(key) {
-    if (currentSort.key === key) {
-      currentSort.direction = currentSort.direction === "asc" ? "desc" : "asc";
+//Sorting button logic
+function sortStudents(key, direction = "asc") {
+  const sorted = [...window.cachedStudents].sort((a, b) => {
+    //Sorting numerically
+    if (key === "currentLevel") {
+      return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
     } else {
-      currentSort.key = key;
-      currentSort.direction = "asc";
+      //Alphabetical sort
+      const valA = a[key]?.toLowerCase() || "";
+      const valB = b[key]?.toLowerCase() || "";
+      return direction === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
     }
-
-    sortStudents(currentSort.key, currentSort.direction);
-  }
-
-  //Initial load
-  fetchStudents().then(studentsData => {
-    window.cachedStudents = studentsData;//store gloabally for resorting
-    renderStudents(studentsData);
   });
 
+  renderStudents(sorted); //re-render with sorted data
+}
 
+//Toggle sort
+let currentSort = { key: "", direction: "asc" };
+
+function toggleSort(key) {
+  if (currentSort.key === key) {
+    currentSort.direction = currentSort.direction === "asc" ? "desc" : "asc";
+  } else {
+    currentSort.key = key;
+    currentSort.direction = "asc";
+  }
+
+  sortStudents(currentSort.key, currentSort.direction);
+}
+
+//Hookinh up sorting buttons
+document.getElementById("sort-firstname").addEventListener("click", () => toggleSort("firstName"));
+document.getElementById("sort-lastname").addEventListener("click", () => toggleSort("lastName"));
+document.getElementById("sort-email").addEventListener("click", () => toggleSort("email"));
+document.getElementById("sort-level").addEventListener("click", () => toggleSort("currentLevel"));
+
+//Initial load
+fetchStudents().then(studentsData => {
+  window.cachedStudents = studentsData; //Store globally for sorting
+  renderStudents(studentsData); //displayin the list
+});
